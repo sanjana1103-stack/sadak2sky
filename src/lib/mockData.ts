@@ -1,4 +1,3 @@
-
 export interface Journey {
   id: string;
   from: string;
@@ -26,96 +25,51 @@ export interface Segment {
   amenities?: string[];
 }
 
-// Added TransportMode type for TransportIcon component
 export type TransportMode = "flight" | "train" | "bus" | "car" | "ferry" | "subway" | "walk";
 
-// Enhanced list of locations in India, including remote places
 export const popularFromLocations = [
-  "Bangalore", 
-  "Mumbai", 
-  "Delhi", 
-  "Chennai", 
-  "Kolkata", 
-  "Hyderabad", 
-  "Pune", 
-  "Jaipur", 
-  "Ahmedabad", 
-  "Kochi", 
-  "Varanasi", 
-  "Guwahati", 
-  "Shimla", 
-  "Darjeeling", 
-  "Rishikesh", 
-  "Manali", 
-  "Leh", 
-  "Andaman Islands", 
-  "Coorg", 
-  "Ooty", 
-  "Munnar", 
-  "Gangtok", 
-  "Tawang", 
-  "Kasol", 
-  "Spiti Valley",
-  "Hampi",
-  "Khajuraho",
-  "Pushkar",
-  "Jaisalmer",
-  "Gokarna"
+  "Mumbai", "Delhi", "Bengaluru", "Hyderabad", "Chennai", 
+  "Kolkata", "Pune", "Ahmedabad", "Jaipur", "Surat", 
+  "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", 
+  "Bhopal", "Visakhapatnam", "Patna", "Vadodara", "Ghaziabad", 
+  "Ludhiana", "Agra", "Nashik", "Ranchi", "Faridabad"
 ];
 
 export const popularToLocations = [
-  "Abu Road",
-  "Agra",
-  "Ajmer",
-  "Allahabad",
-  "Amritsar",
-  "Aurangabad",
-  "Badrinath",
-  "Bhubaneswar",
-  "Bhopal",
-  "Chandigarh",
-  "Dehradun",
-  "Dharamshala",
-  "Gangtok",
-  "Goa",
-  "Haridwar",
-  "Indore",
-  "Jodhpur",
-  "Kanyakumari",
-  "Kedarnath",
-  "Khajuraho",
-  "Kochi",
-  "Kodaikanal",
-  "Madurai",
-  "Mahabalipuram",
-  "Mount Abu",
-  "Mysore",
-  "Nainital",
-  "Patna",
-  "Pondicherry",
-  "Rameswaram",
-  "Shillong",
-  "Srinagar",
-  "Thiruvananthapuram",
-  "Tirupati",
-  "Udaipur",
-  "Ujjain",
-  "Valley of Flowers",
-  "Vrindavan",
-  "Ziro Valley"
+  "Mumbai", "Delhi", "Bengaluru", "Hyderabad", "Chennai", 
+  "Kolkata", "Goa", "Kashmir", "Jaipur", "Shimla", 
+  "Darjeeling", "Manali", "Rishikesh", "Andaman", "Kochi", 
+  "Leh", "Udaipur", "Ooty", "Munnar", "Mussoorie", 
+  "Wayanad", "Coorg", "Dharamshala", "Lonavala", "Gokarna"
 ];
 
-// Add popular destinations for HeroSection component
 export const popularDestinations = [
-  { name: "Goa", img: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80" },
-  { name: "Manali", img: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-  { name: "Varanasi", img: "https://images.unsplash.com/photo-1561361058-c24cecae35ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-  { name: "Jaipur", img: "https://images.unsplash.com/photo-1599661046289-e31897846e41?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-  { name: "Munnar", img: "https://images.unsplash.com/photo-1609866138210-84bb689f0694?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-  { name: "Rishikesh", img: "https://images.unsplash.com/photo-1591018653368-56a0e72bb969?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }
+  {
+    name: "Mumbai",
+    img: "https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bXVtYmFpfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&w=1000&q=80"
+  },
+  {
+    name: "Delhi",
+    img: "https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZGVsaGl8ZW58MHx8MHx8&w=1000&q=80"
+  },
+  {
+    name: "Bengaluru",
+    img: "https://images.unsplash.com/photo-1566552881560-0be862a7c445?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YmFuZ2Fsb3JlfGVufDB8fDB8fA%3D%3D&w=1000&q=80"
+  },
+  {
+    name: "Goa",
+    img: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Z29hfGVufDB8fDB8fA%3D%3D&w=1000&q=80"
+  },
+  {
+    name: "Kolkata",
+    img: "https://images.unsplash.com/photo-1558733585-4b432520e8c2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8a29sa2F0YXxlbnwwfHwwfHw%3D&w=1000&q=80"
+  },
+  {
+    name: "Jaipur",
+    img: "https://images.unsplash.com/photo-1477587458883-47145ed94245?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8amFpcHVyfGVufDB8fDB8fA%3D%3D&w=1000&q=80"
+  }
 ];
 
-// Enhanced journey mock data with more diverse routes
 export const mockJourneys: Journey[] = [
   {
     id: "j1",

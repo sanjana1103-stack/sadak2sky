@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ArrowRightLeft, Calendar, Users } from 'lucide-react';
+import { ArrowRightLeft, Calendar, Users, Search } from 'lucide-react';
 import { popularFromLocations, popularToLocations } from '@/lib/mockData';
+import { toast } from '@/components/ui/use-toast';
 
 interface SearchFormProps {
   onSearch: (from: string, to: string) => void;
@@ -14,20 +15,50 @@ interface SearchFormProps {
 const SearchForm: React.FC<SearchFormProps> = ({ onSearch, className = '' }) => {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(getTomorrowDate());
   const [travelers, setTravelers] = useState('1 Traveler');
+  
+  function getTomorrowDate() {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow.toISOString().split('T')[0];
+  }
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!from || !to) {
+      toast({
+        title: "Fields Required",
+        description: "Please enter both origin and destination locations",
+        variant: "destructive"
+      });
       return;
     }
+    
+    if (from === to) {
+      toast({
+        title: "Invalid Route",
+        description: "Origin and destination cannot be the same",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     onSearch(from, to);
   };
   
   const handleSwap = () => {
     setFrom(to);
     setTo(from);
+  };
+  
+  // Helper function to suggest locations as user types
+  const filterLocations = (input: string, locations: string[]) => {
+    if (!input) return locations.slice(0, 5);
+    const lowerInput = input.toLowerCase();
+    return locations
+      .filter(loc => loc.toLowerCase().includes(lowerInput))
+      .slice(0, 10);
   };
 
   return (
@@ -37,20 +68,24 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, className = '' }) => 
           <div className="grid grid-cols-1 md:grid-cols-[1fr,auto,1fr] gap-3 items-center">
             <div className="relative">
               <label htmlFor="from" className="text-sm font-medium text-gray-500 mb-1 block">From</label>
-              <Input
-                id="from"
-                placeholder="City, Airport, or Station"
-                value={from}
-                onChange={(e) => setFrom(e.target.value)}
-                className="h-12"
-                list="fromLocations"
-                required
-              />
-              <datalist id="fromLocations">
-                {popularFromLocations.map((location, index) => (
-                  <option key={`from-${index}`} value={location} />
-                ))}
-              </datalist>
+              <div className="relative">
+                <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                <Input
+                  id="from"
+                  placeholder="City, Airport, or Station"
+                  value={from}
+                  onChange={(e) => setFrom(e.target.value)}
+                  className="h-12 pl-10"
+                  list="fromLocations"
+                  required
+                  autoComplete="off"
+                />
+                <datalist id="fromLocations">
+                  {filterLocations(from, popularFromLocations).map((location, index) => (
+                    <option key={`from-${index}`} value={location} />
+                  ))}
+                </datalist>
+              </div>
             </div>
             
             <Button 
@@ -65,20 +100,24 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, className = '' }) => 
             
             <div className="relative">
               <label htmlFor="to" className="text-sm font-medium text-gray-500 mb-1 block">To</label>
-              <Input
-                id="to"
-                placeholder="City, Airport, or Station"
-                value={to}
-                onChange={(e) => setTo(e.target.value)}
-                className="h-12"
-                list="toLocations"
-                required
-              />
-              <datalist id="toLocations">
-                {popularToLocations.map((location, index) => (
-                  <option key={`to-${index}`} value={location} />
-                ))}
-              </datalist>
+              <div className="relative">
+                <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                <Input
+                  id="to"
+                  placeholder="City, Airport, or Station"
+                  value={to}
+                  onChange={(e) => setTo(e.target.value)}
+                  className="h-12 pl-10"
+                  list="toLocations"
+                  required
+                  autoComplete="off"
+                />
+                <datalist id="toLocations">
+                  {filterLocations(to, popularToLocations).map((location, index) => (
+                    <option key={`to-${index}`} value={location} />
+                  ))}
+                </datalist>
+              </div>
             </div>
           </div>
           
@@ -90,10 +129,10 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, className = '' }) => 
                 <Input
                   id="date"
                   type="date"
-                  placeholder="Select date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                   className="h-12 pl-10"
+                  min={getTomorrowDate()}
                 />
               </div>
             </div>

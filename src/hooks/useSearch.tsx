@@ -2,15 +2,17 @@
 import { useState } from 'react';
 import { mockJourneys, popularFromLocations, popularToLocations, Journey } from '@/lib/mockData';
 import { toast } from '@/components/ui/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 const useSearch = () => {
+  const navigate = useNavigate();
   const [isSearching, setIsSearching] = useState(false);
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [filteredResults, setFilteredResults] = useState<Journey[]>(mockJourneys);
   
-  // Added new states for booking functionality
+  // Added states for booking functionality
   const [selectedJourneyId, setSelectedJourneyId] = useState<string | null>(null);
   const [isBooking, setIsBooking] = useState(false);
 
@@ -24,8 +26,8 @@ const useSearch = () => {
       // Create dynamic search results based on the entered locations
       let results: Journey[] = [];
       
-      // Generate at least 5-10 dynamic results for any search
-      const numResults = 5 + Math.floor(Math.random() * 5); // 5-10 results
+      // Generate at least 10-15 dynamic results for any search for more variety
+      const numResults = 10 + Math.floor(Math.random() * 5); // 10-15 results
       
       for (let i = 0; i < numResults; i++) {
         // Create a random journey template
@@ -105,10 +107,10 @@ const useSearch = () => {
         title: "Search Completed",
         description: `Found ${results.length} routes from ${fromLocation} to ${toLocation}`,
       });
-    }, 1500);
+    }, 1000); // Reduced delay for better UX
   };
 
-  // Function to handle booking
+  // Improved booking function with direct navigation
   const bookJourney = (journeyId: string) => {
     setSelectedJourneyId(journeyId);
     setIsBooking(true);
@@ -116,11 +118,12 @@ const useSearch = () => {
     // Show toast for booking initiation
     toast({
       title: "Booking Initiated",
-      description: "Preparing your booking details...",
+      description: "Redirecting to confirmation page...",
       variant: "default",
     });
     
-    // No need for timeout here as the redirect happens in JourneyCard component
+    // Direct navigate to booking confirmation page
+    navigate(`/booking-confirmation/${journeyId}`);
   };
 
   return {

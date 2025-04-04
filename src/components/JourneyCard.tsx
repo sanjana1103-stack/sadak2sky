@@ -31,10 +31,8 @@ const JourneyCard: React.FC<JourneyCardProps> = ({ journey, onBook }) => {
       onBook(journey.id);
     }
     
-    // Redirect to a booking confirmation page
-    setTimeout(() => {
-      navigate(`/booking-confirmation/${journey.id}`);
-    }, 1500);
+    // Immediately redirect to booking confirmation page
+    navigate(`/booking-confirmation/${journey.id}`);
   };
   
   // Ensure journey.segments exists and has elements before trying to map over it
