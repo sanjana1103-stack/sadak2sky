@@ -8,6 +8,7 @@ const useSearch = () => {
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [filteredResults, setFilteredResults] = useState(mockJourneys);
   
   // Added new states for booking functionality
   const [selectedJourneyId, setSelectedJourneyId] = useState<string | null>(null);
@@ -20,6 +21,35 @@ const useSearch = () => {
     
     // Simulate API call with a delay
     setTimeout(() => {
+      // Create dynamic search results based on the entered locations
+      let results = [...mockJourneys];
+      
+      // If exact match exists, prioritize it
+      const exactMatches = mockJourneys.filter(
+        journey => journey.from.toLowerCase() === fromLocation.toLowerCase() && 
+                  journey.to.toLowerCase() === toLocation.toLowerCase()
+      );
+      
+      if (exactMatches.length > 0) {
+        // Use exact matches
+        results = exactMatches;
+      } else {
+        // Generate dynamic results based on the search locations
+        results = mockJourneys.map(journey => ({
+          ...journey,
+          from: fromLocation,
+          to: toLocation,
+          id: `dynamic-${Math.random().toString(36).substring(2, 9)}`,
+          segments: journey.segments.map((segment, index) => ({
+            ...segment,
+            from: index === 0 ? fromLocation : segment.from,
+            to: index === journey.segments.length - 1 ? toLocation : segment.to,
+            id: `s-${Math.random().toString(36).substring(2, 9)}`
+          }))
+        }));
+      }
+      
+      setFilteredResults(results);
       setIsSearching(false);
       setSearchPerformed(true);
       
@@ -53,7 +83,7 @@ const useSearch = () => {
   return {
     isSearching,
     searchPerformed,
-    results: mockJourneys,
+    results: filteredResults,
     from,
     to,
     performSearch,

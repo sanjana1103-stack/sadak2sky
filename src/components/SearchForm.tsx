@@ -12,13 +12,16 @@ interface SearchFormProps {
 }
 
 const SearchForm: React.FC<SearchFormProps> = ({ onSearch, className = '' }) => {
-  const [from, setFrom] = useState('Bangalore');
-  const [to, setTo] = useState('Abu Road');
+  const [from, setFrom] = useState('');
+  const [to, setTo] = useState('');
   const [date, setDate] = useState('');
   const [travelers, setTravelers] = useState('1 Traveler');
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!from || !to) {
+      return;
+    }
     onSearch(from, to);
   };
   

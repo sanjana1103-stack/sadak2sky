@@ -17,6 +17,24 @@ const Auth = () => {
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const navigate = useNavigate();
 
+  // Function to auto-verify email during development
+  const autoVerifyEmail = async (email: string) => {
+    try {
+      // Call the Supabase Edge Function to verify email (only in development)
+      const { error } = await supabase.functions.invoke('auth-webhook', {
+        body: { email }
+      });
+      
+      if (error) {
+        console.error('Auto-verification error:', error);
+      } else {
+        console.log('Auto-verification successful or already verified');
+      }
+    } catch (err) {
+      console.error('Failed to auto-verify email:', err);
+    }
+  };
+
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -37,7 +55,7 @@ const Auth = () => {
         
         navigate('/dashboard');
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { error, data } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -49,12 +67,21 @@ const Auth = () => {
 
         if (error) throw error;
         
-        toast({
-          title: "Sign up successful",
-          description: "Welcome to Sadak2Sky! Please check your email for verification.",
-        });
+        // Auto-verify email during development
+        await autoVerifyEmail(email);
         
-        navigate('/dashboard');
+        if (data.user && !data.session) {
+          toast({
+            title: "Sign up successful",
+            description: "Welcome to Sadak2Sky! Please check your email for verification or try signing in directly.",
+          });
+        } else {
+          toast({
+            title: "Sign up successful",
+            description: "Welcome to Sadak2Sky! You are now logged in.",
+          });
+          navigate('/dashboard');
+        }
       }
     } catch (error: any) {
       toast({
