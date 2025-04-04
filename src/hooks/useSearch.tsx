@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { mockJourneys, popularFromLocations, popularToLocations } from '@/lib/mockData';
+import { mockJourneys, popularFromLocations, popularToLocations, Journey } from '@/lib/mockData';
 import { toast } from '@/components/ui/use-toast';
 
 const useSearch = () => {
@@ -8,7 +8,7 @@ const useSearch = () => {
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const [filteredResults, setFilteredResults] = useState(mockJourneys);
+  const [filteredResults, setFilteredResults] = useState<Journey[]>(mockJourneys);
   
   // Added new states for booking functionality
   const [selectedJourneyId, setSelectedJourneyId] = useState<string | null>(null);
@@ -22,32 +22,80 @@ const useSearch = () => {
     // Simulate API call with a delay
     setTimeout(() => {
       // Create dynamic search results based on the entered locations
-      let results = [...mockJourneys];
+      let results: Journey[] = [];
       
-      // If exact match exists, prioritize it
-      const exactMatches = mockJourneys.filter(
-        journey => journey.from.toLowerCase() === fromLocation.toLowerCase() && 
-                  journey.to.toLowerCase() === toLocation.toLowerCase()
-      );
+      // Generate at least 5-10 dynamic results for any search
+      const numResults = 5 + Math.floor(Math.random() * 5); // 5-10 results
       
-      if (exactMatches.length > 0) {
-        // Use exact matches
-        results = exactMatches;
-      } else {
-        // Generate dynamic results based on the search locations
-        results = mockJourneys.map(journey => ({
-          ...journey,
+      for (let i = 0; i < numResults; i++) {
+        // Create a random journey template
+        const baseJourney = mockJourneys[Math.floor(Math.random() * mockJourneys.length)];
+        
+        // Adjust price randomly (±20%)
+        const priceAdjustment = 0.8 + (Math.random() * 0.4); // 0.8 to 1.2
+        const newPrice = Math.round(baseJourney.totalPrice * priceAdjustment);
+        
+        // Adjust duration randomly
+        const baseDurationHours = parseInt(baseJourney.totalDuration.split('h')[0]);
+        const baseDurationMins = parseInt(baseJourney.totalDuration.split('h')[1]?.split('m')[0] || '0');
+        const totalBaseMins = baseDurationHours * 60 + baseDurationMins;
+        const newTotalMins = totalBaseMins * (0.9 + (Math.random() * 0.3)); // ±20%
+        const newDurationHours = Math.floor(newTotalMins / 60);
+        const newDurationMins = Math.round(newTotalMins % 60);
+        const newDuration = `${newDurationHours}h ${newDurationMins}m`;
+        
+        // Create journey with customized segments
+        const newJourney: Journey = {
+          ...baseJourney,
+          id: `dynamic-${Math.random().toString(36).substring(2, 9)}`,
           from: fromLocation,
           to: toLocation,
-          id: `dynamic-${Math.random().toString(36).substring(2, 9)}`,
-          segments: journey.segments.map((segment, index) => ({
+          totalPrice: newPrice,
+          totalDuration: newDuration,
+          // Distribute bestFor types for variety
+          bestFor: i === 0 ? "fastest" : 
+                  i === 1 ? "cheapest" : 
+                  i === 2 ? "recommended" : 
+                  i === 3 ? "comfort" : 
+                  i === 4 ? "scenic" : "budget",
+          segments: baseJourney.segments.map((segment, index) => ({
             ...segment,
-            from: index === 0 ? fromLocation : segment.from,
-            to: index === journey.segments.length - 1 ? toLocation : segment.to,
+            from: index === 0 ? fromLocation : (
+              // For middle segments, use intermediate locations
+              index !== baseJourney.segments.length - 1 ? 
+              `${fromLocation.substring(0, 3)}-${toLocation.substring(0, 3)}-Stop-${index}` : 
+              segment.from
+            ),
+            to: index === baseJourney.segments.length - 1 ? toLocation : (
+              // For middle segments, use intermediate locations
+              index !== 0 ? 
+              `${fromLocation.substring(0, 3)}-${toLocation.substring(0, 3)}-Stop-${index+1}` : 
+              segment.to
+            ),
             id: `s-${Math.random().toString(36).substring(2, 9)}`
           }))
-        }));
+        };
+        
+        results.push(newJourney);
       }
+      
+      // Sort by a mix of criteria to show variety
+      results.sort((a, b) => {
+        // Sort first by bestFor="recommended"
+        if (a.bestFor === "recommended" && b.bestFor !== "recommended") return -1;
+        if (a.bestFor !== "recommended" && b.bestFor === "recommended") return 1;
+        
+        // Then sort by a combination of price and duration
+        const aDurationHours = parseInt(a.totalDuration.split('h')[0]);
+        const bDurationHours = parseInt(b.totalDuration.split('h')[0]);
+        
+        // Random sorting weight (sometimes prefer price, sometimes duration)
+        const priceWeight = Math.random() > 0.5 ? 2 : 1;
+        const durationWeight = Math.random() > 0.5 ? 2 : 1;
+        
+        return (a.totalPrice * priceWeight + aDurationHours * durationWeight) - 
+               (b.totalPrice * priceWeight + bDurationHours * durationWeight);
+      });
       
       setFilteredResults(results);
       setIsSearching(false);
@@ -55,29 +103,24 @@ const useSearch = () => {
       
       toast({
         title: "Search Completed",
-        description: `Found routes from ${fromLocation} to ${toLocation}`,
+        description: `Found ${results.length} routes from ${fromLocation} to ${toLocation}`,
       });
     }, 1500);
   };
 
-  // New function to handle booking
+  // Function to handle booking
   const bookJourney = (journeyId: string) => {
     setSelectedJourneyId(journeyId);
     setIsBooking(true);
     
-    // Simulate booking process
-    setTimeout(() => {
-      setIsBooking(false);
-      
-      toast({
-        title: "Booking Initiated",
-        description: "You'll be redirected to complete your booking.",
-        variant: "default",
-      });
-      
-      // In a real implementation, we would redirect to a booking page or open a modal
-      // This would connect to a Supabase backend for processing the booking
-    }, 1500);
+    // Show toast for booking initiation
+    toast({
+      title: "Booking Initiated",
+      description: "Preparing your booking details...",
+      variant: "default",
+    });
+    
+    // No need for timeout here as the redirect happens in JourneyCard component
   };
 
   return {

@@ -7,6 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import TransportIcon from './TransportIcon';
 import { Journey, Segment } from '@/lib/mockData';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
+import { toast } from '@/components/ui/use-toast';
 
 interface JourneyCardProps {
   journey: Journey;
@@ -15,12 +17,28 @@ interface JourneyCardProps {
 
 const JourneyCard: React.FC<JourneyCardProps> = ({ journey, onBook }) => {
   const [expanded, setExpanded] = useState(false);
+  const navigate = useNavigate();
   
   const handleBookClick = () => {
+    // Show booking toast
+    toast({
+      title: "Booking Initiated",
+      description: `Booking journey from ${journey.from} to ${journey.to}`,
+    });
+    
+    // Call the onBook callback if provided
     if (onBook) {
       onBook(journey.id);
     }
+    
+    // Redirect to a booking confirmation page
+    setTimeout(() => {
+      navigate(`/booking-confirmation/${journey.id}`);
+    }, 1500);
   };
+  
+  // Ensure journey.segments exists and has elements before trying to map over it
+  const segments = journey?.segments || [];
   
   return (
     <Card className={cn(
@@ -33,7 +51,7 @@ const JourneyCard: React.FC<JourneyCardProps> = ({ journey, onBook }) => {
           <div className="flex items-center space-x-3 mb-3 md:mb-0">
             {/* Transport Mode Icons */}
             <div className="flex space-x-1">
-              {journey.segments.map((segment, index) => (
+              {segments.map((segment, index) => (
                 <TransportIcon key={index} mode={segment.type} size={18} />
               ))}
             </div>
@@ -62,17 +80,17 @@ const JourneyCard: React.FC<JourneyCardProps> = ({ journey, onBook }) => {
         <div className="mt-4 flex items-center">
           <div className="flex-1">
             <div className="relative flex items-center">
-              {journey.segments.map((segment, index) => (
+              {segments.length > 0 && segments.map((segment, index) => (
                 <React.Fragment key={`segment-${index}`}>
                   {index > 0 && <div className="h-[2px] flex-grow bg-gray-300" />}
                   <div className="relative flex flex-col items-center">
                     <div className={cn(
                       "w-4 h-4 rounded-full z-10",
                       index === 0 ? "bg-travel-blue" : 
-                      index === journey.segments.length - 1 ? "bg-travel-green" : "bg-travel-gray"
+                      index === segments.length - 1 ? "bg-travel-green" : "bg-travel-gray"
                     )} />
                     <span className="text-xs text-gray-500 mt-1 text-center w-20 truncate">
-                      {index === 0 ? segment.from : index === journey.segments.length - 1 ? segment.to : segment.from}
+                      {index === 0 ? segment.from : index === segments.length - 1 ? segment.to : segment.from}
                     </span>
                   </div>
                 </React.Fragment>
@@ -115,8 +133,8 @@ const JourneyCard: React.FC<JourneyCardProps> = ({ journey, onBook }) => {
         <div className="px-4 pb-4 animate-fade-in">
           <div className="border-t border-gray-200 pt-4">
             {/* Journey Segments */}
-            {journey.segments.map((segment, index) => (
-              <SegmentDetail key={segment.id} segment={segment} isLast={index === journey.segments.length - 1} />
+            {segments.map((segment, index) => (
+              <SegmentDetail key={segment.id} segment={segment} isLast={index === segments.length - 1} />
             ))}
           </div>
           
