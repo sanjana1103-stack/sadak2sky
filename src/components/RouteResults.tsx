@@ -10,9 +10,15 @@ interface RouteResultsProps {
   journeys: Journey[];
   from: string;
   to: string;
+  onBookJourney?: (journeyId: string) => void;
 }
 
-const RouteResults: React.FC<RouteResultsProps> = ({ journeys, from, to }) => {
+const RouteResults: React.FC<RouteResultsProps> = ({ 
+  journeys, 
+  from, 
+  to,
+  onBookJourney 
+}) => {
   const [filteredJourneys, setFilteredJourneys] = useState<Journey[]>(journeys);
   const [sortBy, setSortBy] = useState<string>("recommended");
   
@@ -81,7 +87,11 @@ const RouteResults: React.FC<RouteResultsProps> = ({ journeys, from, to }) => {
       {/* Journey Cards */}
       <div className="space-y-4">
         {filteredJourneys.map((journey) => (
-          <JourneyCard key={journey.id} journey={journey} />
+          <JourneyCard 
+            key={journey.id} 
+            journey={journey} 
+            onBook={onBookJourney ? () => onBookJourney(journey.id) : undefined}
+          />
         ))}
       </div>
     </div>

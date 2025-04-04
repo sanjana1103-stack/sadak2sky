@@ -8,7 +8,7 @@ const NavBar = () => {
     <nav className="sticky top-0 z-50 py-4 px-4 md:px-8 bg-white/80 backdrop-blur-lg border-b border-gray-200 flex items-center justify-between">
       <div className="flex items-center space-x-2">
         <Globe className="h-6 w-6 text-travel-blue" />
-        <span className="text-xl font-bold text-gray-900">Travel Scanner</span>
+        <span className="text-xl font-bold text-gray-900">Sadak2Sky</span>
       </div>
       
       <div className="hidden md:flex items-center space-x-6">

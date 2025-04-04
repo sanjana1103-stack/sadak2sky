@@ -1,4 +1,3 @@
-
 export type TransportMode = 'flight' | 'train' | 'bus' | 'car' | 'ferry' | 'metro' | 'walk' | 'taxi';
 
 export type JourneyLeg = {
@@ -189,10 +188,24 @@ export const popularDestinations = [
   { name: 'Mumbai', img: 'https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=400' },
   { name: 'Delhi', img: 'https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=400' },
   { name: 'Goa', img: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=400' },
-  { name: 'Jaipur', img: 'https://images.unsplash.com/photo-1477587458883-47145ed94245?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=400' },
-  { name: 'Kerala', img: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=400' },
-  { name: 'Himalayas', img: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=400' },
+  { name: 'Ladakh', img: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=400' },
+  { name: 'Varanasi', img: 'https://images.unsplash.com/photo-1561361058-c24e021e2964?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=400' },
+  { name: 'Darjeeling', img: 'https://images.unsplash.com/photo-1544714042-5c0a53660216?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=400' },
 ];
 
-export const popularFromLocations = ["Bangalore", "Mumbai", "Delhi", "Chennai", "Hyderabad", "Kolkata"];
-export const popularToLocations = ["Abu Road", "Manali", "Goa", "Kerala", "Ooty", "Jaipur"];
+export const popularFromLocations = [
+  "Bangalore", "Mumbai", "Delhi", "Chennai", "Hyderabad", "Kolkata", 
+  "Jaipur", "Ahmedabad", "Pune", "Kochi", "Lucknow", "Bhopal",
+  "Chandigarh", "Guwahati", "Srinagar", "Shimla", "Dehradun", "Patna",
+  
+  "Dubai", "Singapore", "Bangkok", "London", "New York", "Tokyo"
+];
+
+export const popularToLocations = [
+  "Abu Road", "Manali", "Goa", "Kerala", "Ooty", "Darjeeling",
+  "Coorg", "Andaman", "Rann of Kutch", "Spiti Valley", "Ziro Valley", "Tawang",
+  "Majuli Island", "Dhanushkodi", "Hampi", "Khajuraho", "Gokarna", "Lakshadweep",
+  "Valley of Flowers", "Sundarbans", "Auli", "Tirthan Valley", "Zanskar", "Lahaul",
+  
+  "Bali", "Paris", "Rome", "Barcelona", "Amsterdam", "Istanbul"
+];

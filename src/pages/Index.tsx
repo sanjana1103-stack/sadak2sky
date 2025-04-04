@@ -8,7 +8,17 @@ import { Card, CardContent } from '@/components/ui/card';
 import { MapPin, Plane, Train, Bus, Clock, DollarSign, Shield } from 'lucide-react';
 
 const Index = () => {
-  const { isSearching, searchPerformed, results, from, to, performSearch } = useSearch();
+  const { 
+    isSearching, 
+    searchPerformed, 
+    results, 
+    from, 
+    to, 
+    performSearch,
+    bookJourney,
+    isBooking,
+    selectedJourneyId
+  } = useSearch();
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -29,7 +39,12 @@ const Index = () => {
           )}
 
           {!isSearching && searchPerformed && (
-            <RouteResults journeys={results} from={from} to={to} />
+            <RouteResults 
+              journeys={results} 
+              from={from} 
+              to={to} 
+              onBookJourney={bookJourney}
+            />
           )}
 
           {!searchPerformed && (
@@ -40,7 +55,7 @@ const Index = () => {
                   Plan Your Journey with Confidence
                 </h2>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                  Travel Scanner searches across multiple transport providers to find you the best routes, 
+                  Sadak2Sky searches across multiple transport providers to find you the best routes, 
                   prices, and travel times for your journey.
                 </p>
               </div>
@@ -109,7 +124,7 @@ const Index = () => {
 
               {/* How It Works */}
               <div className="bg-white rounded-2xl p-8 shadow-md my-16">
-                <h2 className="text-2xl font-semibold text-center mb-8">How Travel Scanner Works</h2>
+                <h2 className="text-2xl font-semibold text-center mb-8">How Sadak2Sky Works</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <div className="flex flex-col items-center text-center">
                     <div className="w-12 h-12 rounded-full bg-travel-blue flex items-center justify-center text-white font-bold text-xl mb-4">
@@ -143,7 +158,7 @@ const Index = () => {
       <footer className="bg-gray-800 text-white py-8">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between">
           <div className="mb-6 md:mb-0">
-            <h3 className="font-bold text-xl mb-2">Travel Scanner</h3>
+            <h3 className="font-bold text-xl mb-2">Sadak2Sky</h3>
             <p className="text-gray-300 text-sm">Your Journey, Our Scan!</p>
           </div>
           
@@ -177,7 +192,7 @@ const Index = () => {
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 pt-6 mt-6 border-t border-gray-700 text-center text-sm text-gray-400">
-          © {new Date().getFullYear()} Travel Scanner. All rights reserved.
+          © {new Date().getFullYear()} Sadak2Sky. All rights reserved.
         </div>
       </footer>
     </div>

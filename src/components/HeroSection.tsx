@@ -24,10 +24,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
       <div className="relative z-10 px-4 py-16 md:py-24 lg:py-32 max-w-7xl mx-auto">
         <div className="text-center mb-8 md:mb-12">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
-            Every Journey<br className="sm:hidden" /> Begins with a Scan
+            From Road to Sky<br className="sm:hidden" /> All in One Search
           </h1>
           <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
-            Compare all transport options and find the perfect route from point A to B
+            Compare all transport options and find the perfect route from anywhere to everywhere
           </p>
         </div>
 
@@ -44,7 +44,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
               <div 
                 key={index} 
                 className="bg-white/10 backdrop-blur-sm rounded-lg overflow-hidden cursor-pointer hover:scale-105 transition-transform"
-                onClick={() => onSearch("Bangalore", destination.name)}
+                onClick={() => onSearch("Your Location", destination.name)}
               >
                 <div 
                   className="h-24 bg-cover bg-center"
