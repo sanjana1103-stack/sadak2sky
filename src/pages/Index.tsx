@@ -1,13 +1,20 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import NavBar from '@/components/NavBar';
 import HeroSection from '@/components/HeroSection';
 import RouteResults from '@/components/RouteResults';
 import useSearch from '@/hooks/useSearch';
 import { Card, CardContent } from '@/components/ui/card';
 import { MapPin, Plane, Train, Bus, Clock, DollarSign, Shield } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
+import type { Session } from '@supabase/supabase-js';
 
 const Index = () => {
+  const [session, setSession] = useState<Session | null>(null);
+  const navigate = useNavigate();
+  
   const { 
     isSearching, 
     searchPerformed, 
@@ -19,6 +26,30 @@ const Index = () => {
     isBooking,
     selectedJourneyId
   } = useSearch();
+
+  useEffect(() => {
+    // Check current auth status
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSession(session);
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleGetStarted = () => {
+    if (session) {
+      navigate('/dashboard');
+    } else {
+      navigate('/auth');
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -97,6 +128,51 @@ const Index = () => {
                     </p>
                   </CardContent>
                 </Card>
+              </div>
+
+              {/* Document Scanning Section */}
+              <div className="bg-white rounded-2xl p-8 shadow-md my-16">
+                <div className="max-w-4xl mx-auto">
+                  <div className="text-center mb-8">
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
+                      Travel Document Management Made Simple
+                    </h2>
+                    <p className="text-gray-600 max-w-2xl mx-auto mb-8">
+                      Upload your travel documents, tickets, and itineraries to have all your travel information 
+                      organized in one place. Get personalized travel suggestions based on your history.
+                    </p>
+                    <Button 
+                      onClick={handleGetStarted}
+                      className="bg-travel-blue hover:bg-travel-blue/90 text-white px-8 py-3 text-lg"
+                    >
+                      {session ? 'Go to Dashboard' : 'Get Started'}
+                    </Button>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-12 h-12 rounded-full bg-travel-blue flex items-center justify-center text-white font-bold text-xl mb-4">
+                        1
+                      </div>
+                      <h3 className="font-medium mb-2">Upload Documents</h3>
+                      <p className="text-gray-600">Upload your travel tickets, bookings, and itineraries</p>
+                    </div>
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-12 h-12 rounded-full bg-travel-blue flex items-center justify-center text-white font-bold text-xl mb-4">
+                        2
+                      </div>
+                      <h3 className="font-medium mb-2">Get Organized</h3>
+                      <p className="text-gray-600">All your travel information in one centralized place</p>
+                    </div>
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-12 h-12 rounded-full bg-travel-blue flex items-center justify-center text-white font-bold text-xl mb-4">
+                        3
+                      </div>
+                      <h3 className="font-medium mb-2">Travel Smarter</h3>
+                      <p className="text-gray-600">Receive personalized travel suggestions and insights</p>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Transportation Options */}
