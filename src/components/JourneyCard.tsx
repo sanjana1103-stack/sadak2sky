@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,10 +9,17 @@ import { cn } from '@/lib/utils';
 
 interface JourneyCardProps {
   journey: Journey;
+  onBook?: (journeyId: string) => void;
 }
 
-const JourneyCard: React.FC<JourneyCardProps> = ({ journey }) => {
+const JourneyCard: React.FC<JourneyCardProps> = ({ journey, onBook }) => {
   const [expanded, setExpanded] = useState(false);
+  
+  const handleBookClick = () => {
+    if (onBook) {
+      onBook(journey.id);
+    }
+  };
   
   return (
     <Card className={cn(
@@ -114,7 +120,10 @@ const JourneyCard: React.FC<JourneyCardProps> = ({ journey }) => {
           </div>
           
           <CardFooter className="px-0 pt-4">
-            <Button className="w-full bg-travel-blue hover:bg-travel-blue-dark">
+            <Button 
+              className="w-full bg-travel-blue hover:bg-travel-blue-dark"
+              onClick={handleBookClick}
+            >
               Book this Journey
             </Button>
           </CardFooter>
