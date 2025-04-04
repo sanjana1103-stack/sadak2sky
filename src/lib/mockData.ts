@@ -1,3 +1,4 @@
+
 export interface Journey {
   id: string;
   from: string;
@@ -7,7 +8,7 @@ export interface Journey {
   arrivalTime: string;
   totalDuration: string;
   totalPrice: number;
-  bestFor: "price" | "duration" | "recommended" | "comfort" | "scenic" | "cultural" | "budget";
+  bestFor: "price" | "duration" | "recommended" | "comfort" | "scenic" | "cultural" | "budget" | "fastest" | "cheapest";
   segments: Segment[];
 }
 
@@ -24,6 +25,9 @@ export interface Segment {
   price?: number;
   amenities?: string[];
 }
+
+// Added TransportMode type for TransportIcon component
+export type TransportMode = "flight" | "train" | "bus" | "car" | "ferry" | "subway" | "walk";
 
 // Enhanced list of locations in India, including remote places
 export const popularFromLocations = [
@@ -99,6 +103,16 @@ export const popularToLocations = [
   "Valley of Flowers",
   "Vrindavan",
   "Ziro Valley"
+];
+
+// Add popular destinations for HeroSection component
+export const popularDestinations = [
+  { name: "Goa", img: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80" },
+  { name: "Manali", img: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
+  { name: "Varanasi", img: "https://images.unsplash.com/photo-1561361058-c24cecae35ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
+  { name: "Jaipur", img: "https://images.unsplash.com/photo-1599661046289-e31897846e41?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
+  { name: "Munnar", img: "https://images.unsplash.com/photo-1609866138210-84bb689f0694?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
+  { name: "Rishikesh", img: "https://images.unsplash.com/photo-1591018653368-56a0e72bb969?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }
 ];
 
 // Enhanced journey mock data with more diverse routes

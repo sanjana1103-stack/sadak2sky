@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { mockJourneys } from '@/lib/mockData';
+import { mockJourneys, popularFromLocations, popularToLocations } from '@/lib/mockData';
 import { toast } from '@/components/ui/use-toast';
 
 const useSearch = () => {
@@ -89,7 +89,10 @@ const useSearch = () => {
     performSearch,
     bookJourney,
     isBooking,
-    selectedJourneyId
+    selectedJourneyId,
+    // Export available locations for use in components
+    availableFromLocations: popularFromLocations,
+    availableToLocations: popularToLocations
   };
 };
 
