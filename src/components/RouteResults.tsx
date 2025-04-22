@@ -1,10 +1,10 @@
-
 import React, { useState } from 'react';
 import JourneyCard from './JourneyCard';
 import { Journey } from '@/lib/mockData';
 import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Filter, ArrowDownUp, Clock, DollarSign, ThumbsUp } from 'lucide-react';
+import { toast } from "@/components/ui/use-toast";
 
 interface RouteResultsProps {
   journeys: Journey[];
@@ -42,6 +42,30 @@ const RouteResults: React.FC<RouteResultsProps> = ({
     }
     
     setFilteredJourneys(sorted);
+  };
+
+  const handleBookNow = (journeyId: string) => {
+    if (onBookJourney) {
+      try {
+        onBookJourney(journeyId);
+        toast({
+          title: "Booking initiated",
+          description: "Processing your journey booking...",
+        });
+      } catch (error) {
+        toast({
+          title: "Booking failed",
+          description: "There was an error processing your booking. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } else {
+      toast({
+        title: "Booking unavailable",
+        description: "Sorry, booking is temporarily unavailable. Please try again later.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -90,7 +114,7 @@ const RouteResults: React.FC<RouteResultsProps> = ({
           <JourneyCard 
             key={journey.id} 
             journey={journey} 
-            onBook={onBookJourney ? () => onBookJourney(journey.id) : undefined}
+            onBook={() => handleBookNow(journey.id)}
           />
         ))}
       </div>
