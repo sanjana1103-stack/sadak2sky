@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Plane, Train, Bus, Car, Ship, Landmark, PersonStanding, CarTaxiFront, Bike, Motorcycle, Mountain } from 'lucide-react';
+import { Plane, Train, Bus, Car, Ship, Landmark, PersonStanding, CarTaxiFront, Bike, Mountain } from 'lucide-react';
 
 // Define all possible transport modes
 export type TransportMode = "flight" | "train" | "bus" | "car" | "ferry" | "subway" | "walk" | "taxi" | "bicycle" | "scooter" | "trekking";
@@ -26,7 +26,7 @@ const TransportIcon: React.FC<TransportIconProps> = ({
     walk: <PersonStanding size={size} className={`text-travel-gray ${className}`} />,
     taxi: <CarTaxiFront size={size} className={`text-travel-yellow ${className}`} />,
     bicycle: <Bike size={size} className={`text-travel-green ${className}`} />,
-    scooter: <Motorcycle size={size} className={`text-travel-gray ${className}`} />,
+    scooter: <Car size={size} className={`text-travel-gray ${className}`} />, // Using Car as a fallback since Motorcycle is unavailable
     trekking: <Mountain size={size} className={`text-travel-blue-dark ${className}`} />
   };
 

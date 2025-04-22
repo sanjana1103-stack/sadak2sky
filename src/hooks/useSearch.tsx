@@ -15,11 +15,23 @@ const useSearch = () => {
   // Added states for booking functionality
   const [selectedJourneyId, setSelectedJourneyId] = useState<string | null>(null);
   const [isBooking, setIsBooking] = useState(false);
+  const [bookingError, setBookingError] = useState<string | null>(null);
 
   const performSearch = (fromLocation: string, toLocation: string) => {
     setIsSearching(true);
     setFrom(fromLocation);
     setTo(toLocation);
+    setBookingError(null);
+    
+    if (!fromLocation || !toLocation) {
+      toast({
+        title: "Search Error",
+        description: "Please provide both origin and destination",
+        variant: "destructive",
+      });
+      setIsSearching(false);
+      return;
+    }
     
     // Simulate API call with a delay
     setTimeout(() => {
@@ -49,7 +61,7 @@ const useSearch = () => {
         // Create journey with customized segments
         const newJourney: Journey = {
           ...baseJourney,
-          id: `dynamic-${Math.random().toString(36).substring(2, 9)}`,
+          id: `journey-${fromLocation.toLowerCase()}-${toLocation.toLowerCase()}-${Math.random().toString(36).substring(2, 9)}`,
           from: fromLocation,
           to: toLocation,
           totalPrice: newPrice,
@@ -107,23 +119,51 @@ const useSearch = () => {
         title: "Search Completed",
         description: `Found ${results.length} routes from ${fromLocation} to ${toLocation}`,
       });
-    }, 1000); // Reduced delay for better UX
+    }, 1000);
   };
 
-  // Improved booking function with direct navigation
+  // Improved booking function with better error handling and direct navigation
   const bookJourney = (journeyId: string) => {
-    setSelectedJourneyId(journeyId);
-    setIsBooking(true);
-    
-    // Show toast for booking initiation
-    toast({
-      title: "Booking Initiated",
-      description: "Redirecting to confirmation page...",
-      variant: "default",
-    });
-    
-    // Direct navigate to booking confirmation page
-    navigate(`/booking-confirmation/${journeyId}`);
+    try {
+      setSelectedJourneyId(journeyId);
+      setIsBooking(true);
+      setBookingError(null);
+      
+      const selectedJourney = filteredResults.find(journey => journey.id === journeyId);
+      
+      if (!selectedJourney) {
+        throw new Error("Journey not found. Please try searching again.");
+      }
+      
+      // Show toast for booking initiation
+      toast({
+        title: "Booking In Progress",
+        description: "Processing your booking...",
+        variant: "default",
+      });
+      
+      // Simulate API booking process with a slight delay
+      setTimeout(() => {
+        // Success - redirect to confirmation page
+        toast({
+          title: "Booking Successful!",
+          description: `Your journey from ${selectedJourney.from} to ${selectedJourney.to} has been booked.`,
+          variant: "default",
+        });
+        
+        // Direct navigate to booking confirmation page
+        navigate(`/booking-confirmation/${journeyId}`);
+      }, 1500);
+    } catch (error: any) {
+      setIsBooking(false);
+      setBookingError(error.message || "An error occurred while booking. Please try again.");
+      
+      toast({
+        title: "Booking Failed",
+        description: error.message || "An error occurred while booking. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return {
@@ -136,6 +176,7 @@ const useSearch = () => {
     bookJourney,
     isBooking,
     selectedJourneyId,
+    bookingError,
     // Export available locations for use in components
     availableFromLocations: popularFromLocations,
     availableToLocations: popularToLocations

@@ -100,10 +100,56 @@
   }
 
   .journey-card {
-    @apply bg-white rounded-xl shadow-md p-4 transition-all hover:shadow-lg;
+    @apply bg-white rounded-xl shadow-md p-4 transition-all duration-300 hover:shadow-lg hover:scale-[1.01];
   }
 
   .travel-gradient {
     @apply bg-gradient-to-r from-travel-blue to-travel-green;
   }
+  
+  /* New modern styling elements */
+  .card-hover-effect {
+    @apply transition-all duration-300 hover:shadow-xl hover:scale-[1.02];
+  }
+  
+  .glassmorphism-dark {
+    @apply bg-gray-900/70 backdrop-blur-lg border border-gray-700/30 shadow-lg;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-travel-blue to-travel-green;
+  }
+  
+  .highlight-box {
+    @apply relative before:absolute before:-inset-1 before:rounded-lg before:bg-travel-blue/10 before:-z-10;
+  }
+  
+  .animated-border {
+    @apply relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-travel-blue hover:after:w-full after:transition-all after:duration-300;
+  }
+  
+  .pill-tag {
+    @apply px-2 py-0.5 rounded-full text-xs font-medium bg-travel-blue/10 text-travel-blue;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+  
+  .staggered-item {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+  
+  .staggered-item:nth-child(1) { animation-delay: 0.1s; }
+  .staggered-item:nth-child(2) { animation-delay: 0.2s; }
+  .staggered-item:nth-child(3) { animation-delay: 0.3s; }
+  .staggered-item:nth-child(4) { animation-delay: 0.4s; }
+  .staggered-item:nth-child(5) { animation-delay: 0.5s; }
 }
